@@ -1,0 +1,39 @@
+# Moves Formula/ainotate.rb to the newest ainotate release on PyPI.
+name: update
+
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  ainotate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Point the formula at the latest PyPI release
+        id: bump
+        run: |
+          python3 - <<'PY'
+          import json, os, re, urllib.request
+          info = json.load(urllib.request.urlopen("https://pypi.org/pypi/ainotate/json"))
+          v = info["info"]["version"]
+          sdist = next(u for u in info["urls"] if u["packagetype"] == "sdist")
+          p = "Formula/ainotate.rb"
+          s = open(p).read()
+          new = re.sub(r'^  url ".*"$', f'  url "{sdist["url"]}"', s, flags=re.M)
+          new = re.sub(r'^  sha256 ".*"$', f'  sha256 "{sdist["digests"]["sha256"]}"', new, flags=re.M)
+          open(p, "w").write(new)
+          with open(os.environ["GITHUB_OUTPUT"], "a") as out:
+              out.write(f"version={v}\nchanged={'yes' if new != s else 'no'}\n")
+          PY
+      - name: Commit
+        if: steps.bump.outputs.changed == 'yes'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "ainotate ${{ steps.bump.outputs.version }}"
+          git push

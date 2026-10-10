@@ -1,8 +1,8 @@
 class Ainotate < Formula
   desc "Annotated screenshots for AI agents: steps, arrows, boxes, labels, redaction"
   homepage "https://github.com/dontpayfull/AInotate"
-  url "https://files.pythonhosted.org/packages/a2/9f/8c62968ccb76ebb5bc0de9681f312b341d55880aee9b213983f1cbb40289/ainotate-0.1.5.tar.gz"
-  sha256 "ea85ecb58e77636a2965c44a1ccdf9faba673912b929ab8077f5422bff0f9319"
+  url "https://files.pythonhosted.org/packages/9f/84/7c7fbe5c4ac058e0d7eeda1b5f8a0a25af2b47c0cb7da82f5ef58d95df8c/ainotate-0.1.8.tar.gz"
+  sha256 "0328ec66f2f7f327a79d4a5c5ff5e5c1970651cea17d2f444ebb3c6c549b61df"
   license "AGPL-3.0-or-later"
 
   depends_on "python@3.13"
